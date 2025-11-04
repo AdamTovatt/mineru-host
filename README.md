@@ -1,6 +1,12 @@
 # MinerU Host
+[![Tests](https://github.com/AdamTovatt/mineru-sharp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/AdamTovatt/mineru-sharp/actions/workflows/dotnet.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 A C# wrapper for [MinerU](https://github.com/opendatalab/MinerU) that automates setup and manages the process lifecycle.
+
+Is best used together with the [`MinerUSharp`](https://github.com/AdamTovatt/mineru-sharp) library (available as a [NuGet package](https://www.nuget.org/packages/MinerUSharp)).
+
+Easily installed with [`updaemon`](https://github.com/AdamTovatt/updaemon).
 
 ## What It Does
 
@@ -12,7 +18,7 @@ A C# wrapper for [MinerU](https://github.com/opendatalab/MinerU) that automates 
 
 ## Possible future expansion
 
-- Clean periodically restart the underlying python service that seems to have a memory leak
+- Periodically restart the underlying python service that seems to have a memory leak
 
 ## Usage
 
