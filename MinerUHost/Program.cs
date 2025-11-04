@@ -64,6 +64,7 @@ namespace MinerUHost
             services.AddSingleton<IProcessRunner, ProcessRunner>();
             services.AddSingleton<ISetupValidator, SetupValidator>();
             services.AddSingleton<IPythonSetupService, PythonSetupService>();
+            services.AddSingleton<IOutputCleaner, OutputCleaner>();
             services.AddSingleton<IMinerUApiLauncher, MinerUApiLauncher>();
         }
 

@@ -10,6 +10,7 @@ namespace MinerUHost.Tests
         private readonly Mock<ISetupValidator> _setupValidatorMock;
         private readonly Mock<IPythonSetupService> _pythonSetupServiceMock;
         private readonly Mock<IProcessRunner> _processRunnerMock;
+        private readonly Mock<IOutputCleaner> _outputCleanerMock;
         private readonly Mock<ILogger<MinerUApiLauncher>> _loggerMock;
         private readonly MinerUApiLauncher _launcher;
         private readonly string _testDirectory;
@@ -19,11 +20,13 @@ namespace MinerUHost.Tests
             _setupValidatorMock = new Mock<ISetupValidator>();
             _pythonSetupServiceMock = new Mock<IPythonSetupService>();
             _processRunnerMock = new Mock<IProcessRunner>();
+            _outputCleanerMock = new Mock<IOutputCleaner>();
             _loggerMock = new Mock<ILogger<MinerUApiLauncher>>();
             _launcher = new MinerUApiLauncher(
                 _setupValidatorMock.Object,
                 _pythonSetupServiceMock.Object,
                 _processRunnerMock.Object,
+                _outputCleanerMock.Object,
                 _loggerMock.Object
             );
             _testDirectory = Path.Combine(Path.GetTempPath(), $"mineru-test-{Guid.NewGuid()}");

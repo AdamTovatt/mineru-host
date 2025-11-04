@@ -8,19 +8,21 @@ namespace MinerUHost
         private readonly ISetupValidator _setupValidator;
         private readonly IPythonSetupService _pythonSetupService;
         private readonly IProcessRunner _processRunner;
+        private readonly IOutputCleaner _outputCleaner;
         private readonly ILogger<MinerUApiLauncher> _logger;
         private const string VenvDirectoryName = "mineru-venv";
-        private const string OutputDirectoryName = "output";
 
         public MinerUApiLauncher(
             ISetupValidator setupValidator,
             IPythonSetupService pythonSetupService,
             IProcessRunner processRunner,
+            IOutputCleaner outputCleaner,
             ILogger<MinerUApiLauncher> logger)
         {
             _setupValidator = setupValidator;
             _pythonSetupService = pythonSetupService;
             _processRunner = processRunner;
+            _outputCleaner = outputCleaner;
             _logger = logger;
         }
 
@@ -44,7 +46,7 @@ namespace MinerUHost
 
             // Start cleanup timer
             using (Timer cleanupTimer = new Timer(
-                callback: _ => CleanupOutputDirectory(options.InstallPath),
+                callback: _ => _outputCleaner.CleanOutputDirectory(options.InstallPath),
                 state: null,
                 dueTime: TimeSpan.FromMinutes(options.CleanupIntervalMinutes),
                 period: TimeSpan.FromMinutes(options.CleanupIntervalMinutes)))
@@ -125,56 +127,6 @@ namespace MinerUHost
             finally
             {
                 process.Exited -= ProcessExited;
-            }
-        }
-
-        private void CleanupOutputDirectory(string installPath)
-        {
-            string outputPath = Path.Combine(installPath, OutputDirectoryName);
-
-            if (!Directory.Exists(outputPath))
-            {
-                _logger.LogDebug("Output directory does not exist. Skipping cleanup.");
-                return;
-            }
-
-            try
-            {
-                _logger.LogInformation("Cleaning up output directory: {OutputPath}", outputPath);
-                
-                DirectoryInfo directoryInfo = new DirectoryInfo(outputPath);
-                
-                foreach (FileInfo file in directoryInfo.GetFiles())
-                {
-                    try
-                    {
-                        file.Delete();
-                        _logger.LogDebug("Deleted file: {FileName}", file.Name);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogWarning(ex, "Failed to delete file: {FileName}", file.Name);
-                    }
-                }
-
-                foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
-                {
-                    try
-                    {
-                        directory.Delete(recursive: true);
-                        _logger.LogDebug("Deleted directory: {DirectoryName}", directory.Name);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogWarning(ex, "Failed to delete directory: {DirectoryName}", directory.Name);
-                    }
-                }
-
-                _logger.LogInformation("Output directory cleanup completed");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error during output directory cleanup");
             }
         }
 

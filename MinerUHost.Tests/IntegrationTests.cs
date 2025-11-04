@@ -192,9 +192,11 @@ namespace MinerUHost.Tests
                     };
 
                     ILogger<MinerUApiLauncher> launcherLogger = new TestOutputLogger<MinerUApiLauncher>(_output);
+                    ILogger<OutputCleaner> cleanerLogger = new TestOutputLogger<OutputCleaner>(_output);
                     SetupValidator validator = new SetupValidator();
                     PythonSetupService setupService = new PythonSetupService(_processRunner, _setupServiceLogger);
-                    MinerUApiLauncher launcher = new MinerUApiLauncher(validator, setupService, _processRunner, launcherLogger);
+                    OutputCleaner outputCleaner = new OutputCleaner(cleanerLogger);
+                    MinerUApiLauncher launcher = new MinerUApiLauncher(validator, setupService, _processRunner, outputCleaner, launcherLogger);
 
                     await launcher.RunAsync(options, cancellationTokenSource.Token);
                 }, cancellationTokenSource.Token);
