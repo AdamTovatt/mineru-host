@@ -142,6 +142,12 @@ namespace MinerUHost.Tests
         [Fact]
         public void CleanOutputDirectory_WithReadOnlyFile_LogsWarningAndContinues()
         {
+            // Skip on non-Windows platforms where ReadOnly doesn't prevent deletion
+            if (!OperatingSystem.IsWindows())
+            {
+                return;
+            }
+
             // Arrange
             string outputDirectory = Path.Combine(_testDirectory, "output");
             Directory.CreateDirectory(outputDirectory);
