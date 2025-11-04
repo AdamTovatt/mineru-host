@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinerUHost", "MinerUHost\MinerUHost.csproj", "{FF585263-0B0B-4AAB-AB66-EB449BB267FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinerUHost.Tests", "MinerUHost.Tests\MinerUHost.Tests.csproj", "{047D4893-572A-4F79-95C6-250C7B06AB91}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FF585263-0B0B-4AAB-AB66-EB449BB267FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF585263-0B0B-4AAB-AB66-EB449BB267FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF585263-0B0B-4AAB-AB66-EB449BB267FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF585263-0B0B-4AAB-AB66-EB449BB267FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{047D4893-572A-4F79-95C6-250C7B06AB91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{047D4893-572A-4F79-95C6-250C7B06AB91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{047D4893-572A-4F79-95C6-250C7B06AB91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{047D4893-572A-4F79-95C6-250C7B06AB91}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EEA055BC-A822-4925-B75C-799B98D1CA6D}
+	EndGlobalSection
+EndGlobal
