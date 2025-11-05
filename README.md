@@ -29,7 +29,11 @@ Creation of the virtual environment and installation only happens the first time
 You can use `MinerUHost` either as a [standalone application](#as-a-standalone-application) or as a [library (NuGet package)](#as-a-library-nuget-package).
 
 ## As a Standalone Application
+`MinerUHost` is available both as self-contained and framework dependent builds. This means that you don't have to have a .NET runtime installed on your computer if you don't want to, just chose the self-contained version and it will run regardless.
 
+Can be compiled to run on any operating system (Windows, Linux & macOS at least).
+
+### Command Line Syntax
 ```bash
 mineru-host [options]
 ```
