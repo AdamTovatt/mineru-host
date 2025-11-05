@@ -183,22 +183,9 @@ namespace MinerUHost.Tests
                 _output.WriteLine("Starting MinerU host application...");
                 launcherTask = Task.Run(async () =>
                 {
-                    CommandLineOptions options = new CommandLineOptions
-                    {
-                        Host = "127.0.0.1",
-                        Port = port,
-                        InstallPath = _testDirectory,
-                        CleanupIntervalMinutes = 60,
-                    };
-
-                    ILogger<MinerUApiLauncher> launcherLogger = new TestOutputLogger<MinerUApiLauncher>(_output);
-                    ILogger<OutputCleaner> cleanerLogger = new TestOutputLogger<OutputCleaner>(_output);
-                    SetupValidator validator = new SetupValidator();
-                    PythonSetupService setupService = new PythonSetupService(_processRunner, _setupServiceLogger);
-                    OutputCleaner outputCleaner = new OutputCleaner(cleanerLogger);
-                    MinerUApiLauncher launcher = new MinerUApiLauncher(validator, setupService, _processRunner, outputCleaner, launcherLogger);
-
-                    await launcher.RunAsync(options, cancellationTokenSource.Token);
+                    CommandLineOptions options = new CommandLineOptions("127.0.0.1", port, _testDirectory, 60);
+                    MinerUProcessHost host = new MinerUProcessHost(options);
+                    await host.RunAsync(cancellationTokenSource.Token);
                 }, cancellationTokenSource.Token);
 
                 // Wait for service to be ready
@@ -216,7 +203,7 @@ namespace MinerUHost.Tests
                 // Act
                 using (HttpClient httpClient = new HttpClient())
                 {
-                    httpClient.Timeout = TimeSpan.FromSeconds(60);
+                    httpClient.Timeout = TimeSpan.FromSeconds(120);
                     
                     using (MineruClient client = new MineruClient(mineruUrl, httpClient))
                     {

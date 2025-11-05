@@ -7,6 +7,32 @@ namespace MinerUHost
         public string InstallPath { get; set; } = string.Empty;
         public int CleanupIntervalMinutes { get; set; } = 5;
 
+        public CommandLineOptions()
+        {
+        }
+
+        public CommandLineOptions(string host, int port)
+        {
+            Host = host;
+            Port = port;
+            InstallPath = AppContext.BaseDirectory;
+        }
+
+        public CommandLineOptions(string host, int port, string installPath)
+        {
+            Host = host;
+            Port = port;
+            InstallPath = installPath;
+        }
+
+        public CommandLineOptions(string host, int port, string installPath, int cleanupIntervalMinutes)
+        {
+            Host = host;
+            Port = port;
+            InstallPath = installPath;
+            CleanupIntervalMinutes = cleanupIntervalMinutes;
+        }
+
         public static CommandLineOptions Parse(string[] args)
         {
             CommandLineOptions options = new CommandLineOptions();

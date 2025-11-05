@@ -22,6 +22,8 @@ Easily installed with [`updaemon`](https://github.com/AdamTovatt/updaemon).
 
 ## Usage
 
+### As a Standalone Application
+
 ```bash
 mineru-host [options]
 ```
@@ -37,6 +39,78 @@ mineru-host [options]
 
 ```bash
 mineru-host --host 127.0.0.1 --port 9000
+```
+
+### As a Library (NuGet Package)
+
+Install the package:
+```bash
+dotnet add package MinerUHost
+```
+
+Use in your C# application:
+```csharp
+using MinerUHost;
+
+// Simple usage with default settings
+var host = new MinerUProcessHost("127.0.0.1", 8200);
+await host.RunAsync(cancellationToken);
+
+// Or with custom install path
+var host = new MinerUProcessHost("127.0.0.1", 8200, "/path/to/install");
+await host.RunAsync(cancellationToken);
+
+// Or with full configuration
+var host = new MinerUProcessHost("127.0.0.1", 8200, "/path/to/install", cleanupIntervalMinutes: 10);
+await host.RunAsync(cancellationToken);
+
+// Or using CommandLineOptions
+var options = new CommandLineOptions("127.0.0.1", 8200, "/path/to/install", 10);
+var host = new MinerUProcessHost(options);
+await host.RunAsync(cancellationToken);
+
+// With custom logging (integrating with your existing ILoggerFactory)
+var host = new MinerUProcessHost(options, yourLoggerFactory);
+await host.RunAsync(cancellationToken);
+```
+
+#### Example: Running in ASP.NET Core as a Background Service
+
+```csharp
+public class MinerUBackgroundService : BackgroundService
+{
+    private readonly ILogger<MinerUBackgroundService> _logger;
+    private readonly ILoggerFactory _loggerFactory;
+
+    public MinerUBackgroundService(ILogger<MinerUBackgroundService> logger, ILoggerFactory loggerFactory)
+    {
+        _logger = logger;
+        _loggerFactory = loggerFactory;
+    }
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        _logger.LogInformation("Starting MinerU host service");
+
+        try
+        {
+            var options = new CommandLineOptions("127.0.0.1", 8200);
+            var host = new MinerUProcessHost(options, _loggerFactory);
+            await host.RunAsync(stoppingToken);
+        }
+        catch (OperationCanceledException)
+        {
+            _logger.LogInformation("MinerU host service stopped");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "MinerU host service failed");
+        }
+    }
+}
+
+// Register in Program.cs
+builder.Services.AddHostedService<MinerUBackgroundService>();
 ```
 
 ## Requirements

@@ -1,6 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-
 namespace MinerUHost
 {
     public class Program
@@ -19,53 +16,31 @@ namespace MinerUHost
                 return 1;
             }
 
-            ServiceCollection services = new ServiceCollection();
-            ConfigureServices(services);
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            using (ServiceProvider serviceProvider = services.BuildServiceProvider())
+            // Handle Ctrl+C gracefully
+            Console.CancelKeyPress += (sender, e) =>
             {
-                IMinerUApiLauncher launcher = serviceProvider.GetRequiredService<IMinerUApiLauncher>();
-                CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+                e.Cancel = true;
+                cancellationTokenSource.Cancel();
+            };
 
-                // Handle Ctrl+C gracefully
-                Console.CancelKeyPress += (sender, e) =>
-                {
-                    e.Cancel = true;
-                    cancellationTokenSource.Cancel();
-                };
-
-                try
-                {
-                    await launcher.RunAsync(options, cancellationTokenSource.Token);
-                    return 0;
-                }
-                catch (OperationCanceledException)
-                {
-                    Console.WriteLine("Application stopped.");
-                    return 0;
-                }
-                catch (Exception ex)
-                {
-                    ILogger<Program> logger = serviceProvider.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "Application failed with error: {Message}", ex.Message);
-                    return 1;
-                }
+            try
+            {
+                MinerUProcessHost host = new MinerUProcessHost(options);
+                await host.RunAsync(cancellationTokenSource.Token);
+                return 0;
             }
-        }
-
-        private static void ConfigureServices(ServiceCollection services)
-        {
-            services.AddLogging(configure =>
+            catch (OperationCanceledException)
             {
-                configure.AddConsole();
-                configure.SetMinimumLevel(LogLevel.Information);
-            });
-
-            services.AddSingleton<IProcessRunner, ProcessRunner>();
-            services.AddSingleton<ISetupValidator, SetupValidator>();
-            services.AddSingleton<IPythonSetupService, PythonSetupService>();
-            services.AddSingleton<IOutputCleaner, OutputCleaner>();
-            services.AddSingleton<IMinerUApiLauncher, MinerUApiLauncher>();
+                Console.WriteLine("Application stopped.");
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Application failed with error: {ex.Message}");
+                return 1;
+            }
         }
 
         private static void PrintUsage()
