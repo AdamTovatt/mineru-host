@@ -1,7 +1,15 @@
 namespace MinerUHost
 {
+    /// <summary>
+    /// The main entry point for the MinerU Host application.
+    /// </summary>
     public class Program
     {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        /// <param name="args">Command-line arguments.</param>
+        /// <returns>The exit code of the application (0 for success, non-zero for failure).</returns>
         public static async Task<int> Main(string[] args)
         {
             // Check for help flag

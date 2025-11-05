@@ -2,6 +2,9 @@ using Microsoft.Extensions.Logging;
 
 namespace MinerUHost
 {
+    /// <summary>
+    /// Provides functionality to perform Python environment setup for MinerU.
+    /// </summary>
     public class PythonSetupService : IPythonSetupService
     {
         private readonly IProcessRunner _processRunner;
@@ -9,12 +12,21 @@ namespace MinerUHost
         private const string VenvDirectoryName = "mineru-venv";
         private const string SetupMarkerFileName = ".mineru-setup-complete";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PythonSetupService"/> class.
+        /// </summary>
+        /// <param name="processRunner">The process runner to execute external processes.</param>
+        /// <param name="logger">The logger for recording events.</param>
         public PythonSetupService(IProcessRunner processRunner, ILogger<PythonSetupService> logger)
         {
             _processRunner = processRunner;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Performs the complete setup process including creating a virtual environment and installing dependencies.
+        /// </summary>
+        /// <param name="installPath">The installation path where the setup should be performed.</param>
         public void PerformSetup(string installPath)
         {
             _logger.LogInformation("Starting MinerU setup in {InstallPath}", installPath);

@@ -3,6 +3,9 @@ using System.Diagnostics;
 
 namespace MinerUHost
 {
+    /// <summary>
+    /// Provides functionality to launch and manage the MinerU API process.
+    /// </summary>
     public class MinerUApiLauncher : IMinerUApiLauncher
     {
         private readonly ISetupValidator _setupValidator;
@@ -12,6 +15,14 @@ namespace MinerUHost
         private readonly ILogger<MinerUApiLauncher> _logger;
         private const string VenvDirectoryName = "mineru-venv";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MinerUApiLauncher"/> class.
+        /// </summary>
+        /// <param name="setupValidator">The validator to check if setup is complete.</param>
+        /// <param name="pythonSetupService">The service to perform Python environment setup.</param>
+        /// <param name="processRunner">The process runner to execute external processes.</param>
+        /// <param name="outputCleaner">The cleaner to clean output directories.</param>
+        /// <param name="logger">The logger for recording events.</param>
         public MinerUApiLauncher(
             ISetupValidator setupValidator,
             IPythonSetupService pythonSetupService,
@@ -26,6 +37,12 @@ namespace MinerUHost
             _logger = logger;
         }
 
+        /// <summary>
+        /// Runs the MinerU API process asynchronously with the specified options.
+        /// </summary>
+        /// <param name="options">The command-line options for configuring the MinerU API.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the operation.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
         public async Task RunAsync(CommandLineOptions options, CancellationToken cancellationToken)
         {
             _logger.LogInformation("MinerU Host starting...");

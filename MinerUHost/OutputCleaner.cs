@@ -2,16 +2,27 @@ using Microsoft.Extensions.Logging;
 
 namespace MinerUHost
 {
+    /// <summary>
+    /// Provides functionality to clean output directories.
+    /// </summary>
     public class OutputCleaner : IOutputCleaner
     {
         private readonly ILogger<OutputCleaner> _logger;
         private const string OutputDirectoryName = "output";
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OutputCleaner"/> class.
+        /// </summary>
+        /// <param name="logger">The logger for recording events.</param>
         public OutputCleaner(ILogger<OutputCleaner> logger)
         {
             _logger = logger;
         }
 
+        /// <summary>
+        /// Cleans the output directory at the specified installation path.
+        /// </summary>
+        /// <param name="installPath">The installation path where the output directory is located.</param>
         public void CleanOutputDirectory(string installPath)
         {
             string outputPath = Path.Combine(installPath, OutputDirectoryName);
