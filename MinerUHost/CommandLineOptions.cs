@@ -80,11 +80,11 @@ namespace MinerUHost
         public static CommandLineOptions Parse(string[] args)
         {
             CommandLineOptions options = new CommandLineOptions();
-            
+
             for (int i = 0; i < args.Length; i++)
             {
                 string arg = args[i];
-                
+
                 if (arg == "--host" && i + 1 < args.Length)
                 {
                     options.Host = args[i + 1];

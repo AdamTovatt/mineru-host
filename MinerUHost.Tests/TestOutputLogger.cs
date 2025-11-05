@@ -31,7 +31,7 @@ namespace MinerUHost.Tests
         {
             string message = formatter(state, exception);
             _output.WriteLine($"[{logLevel}] {message}");
-            
+
             if (exception != null)
             {
                 _output.WriteLine($"Exception: {exception}");

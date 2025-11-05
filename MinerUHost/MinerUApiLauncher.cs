@@ -97,13 +97,13 @@ namespace MinerUHost
                     catch (OperationCanceledException)
                     {
                         _logger.LogInformation("Shutdown requested. Stopping MinerU API...");
-                        
+
                         if (!mineruProcess.HasExited)
                         {
                             mineruProcess.Kill(entireProcessTree: true);
                             mineruProcess.WaitForExit(5000);
                         }
-                        
+
                         throw;
                     }
 
@@ -165,7 +165,7 @@ namespace MinerUHost
         private string GetMinerUExecutablePath(string installPath)
         {
             string venvPath = Path.Combine(installPath, VenvDirectoryName);
-            
+
             if (OperatingSystem.IsWindows())
             {
                 return Path.Combine(venvPath, "Scripts", "mineru-api.exe");

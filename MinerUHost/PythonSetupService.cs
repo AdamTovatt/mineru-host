@@ -43,7 +43,7 @@ namespace MinerUHost
         private void CreateVirtualEnvironment(string installPath)
         {
             _logger.LogInformation("Creating virtual environment...");
-            
+
             int exitCode = _processRunner.RunProcess(
                 fileName: "python",
                 arguments: $"-m venv {VenvDirectoryName}",
@@ -57,9 +57,9 @@ namespace MinerUHost
         private void UpgradePip(string installPath)
         {
             _logger.LogInformation("Upgrading pip...");
-            
+
             string pythonExecutable = GetVenvExecutablePath(installPath, "python");
-            
+
             int exitCode = _processRunner.RunProcess(
                 fileName: pythonExecutable,
                 arguments: "-m pip install --upgrade pip",
@@ -73,9 +73,9 @@ namespace MinerUHost
         private void InstallUv(string installPath)
         {
             _logger.LogInformation("Installing uv...");
-            
+
             string pipExecutable = GetVenvExecutablePath(installPath, "pip");
-            
+
             int exitCode = _processRunner.RunProcess(
                 fileName: pipExecutable,
                 arguments: "install uv",
@@ -89,10 +89,10 @@ namespace MinerUHost
         private void InstallMinerU(string installPath)
         {
             _logger.LogInformation("Installing MinerU...");
-            
+
             string uvExecutable = GetVenvExecutablePath(installPath, "uv");
             string pythonExecutable = GetVenvExecutablePath(installPath, "python");
-            
+
             int exitCode = _processRunner.RunProcess(
                 fileName: uvExecutable,
                 arguments: $"pip install -U \"mineru[core]\" --python \"{pythonExecutable}\"",
@@ -113,7 +113,7 @@ namespace MinerUHost
         private string GetVenvExecutablePath(string installPath, string executableName)
         {
             string venvPath = Path.Combine(installPath, VenvDirectoryName);
-            
+
             if (OperatingSystem.IsWindows())
             {
                 return Path.Combine(venvPath, "Scripts", $"{executableName}.exe");

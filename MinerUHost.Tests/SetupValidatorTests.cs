@@ -26,7 +26,7 @@ namespace MinerUHost.Tests
             // Arrange
             string venvPath = Path.Combine(_testDirectory, "mineru-venv");
             string markerPath = Path.Combine(_testDirectory, ".mineru-setup-complete");
-            
+
             Directory.CreateDirectory(venvPath);
             File.WriteAllText(markerPath, "");
 

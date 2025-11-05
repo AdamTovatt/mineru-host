@@ -22,13 +22,13 @@ namespace MinerUHost.Tests
             _resourceManager = fixture.ResourceManager;
             _testDirectory = Path.Combine(Path.GetTempPath(), $"mineru-integration-test-{Guid.NewGuid()}");
             Directory.CreateDirectory(_testDirectory);
-            
+
             _output.WriteLine($"Test directory: {_testDirectory}");
 
             // Create loggers that output to test output
             _processRunnerLogger = new TestOutputLogger<ProcessRunner>(_output);
             _setupServiceLogger = new TestOutputLogger<PythonSetupService>(_output);
-            
+
             _processRunner = new ProcessRunner(_processRunnerLogger);
         }
 
@@ -55,7 +55,7 @@ namespace MinerUHost.Tests
         {
             // Arrange
             _output.WriteLine("Starting full setup integration test");
-            
+
             // Check if Python is available
             if (!IsPythonAvailable())
             {
@@ -90,7 +90,7 @@ namespace MinerUHost.Tests
         {
             // Arrange
             _output.WriteLine("Starting setup validator integration test");
-            
+
             if (!IsPythonAvailable())
             {
                 _output.WriteLine("Python is not available. Skipping test.");
@@ -164,7 +164,7 @@ namespace MinerUHost.Tests
         {
             // Arrange
             _output.WriteLine("Starting MinerU full integration test");
-            
+
             if (!IsPythonAvailable())
             {
                 _output.WriteLine("Python is not available. Skipping test.");
@@ -173,7 +173,7 @@ namespace MinerUHost.Tests
 
             string mineruUrl = "http://localhost:8299"; // Use different port to avoid conflicts
             int port = 8299;
-            
+
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
             Task? launcherTask = null;
 
@@ -191,7 +191,7 @@ namespace MinerUHost.Tests
                 // Wait for service to be ready
                 _output.WriteLine($"Waiting for MinerU to be ready at {mineruUrl}...");
                 bool isReady = await WaitForServiceToBeReady(mineruUrl, timeoutSeconds: 120);
-                
+
                 if (!isReady)
                 {
                     _output.WriteLine("MinerU service did not become ready in time. Skipping test.");
@@ -204,7 +204,7 @@ namespace MinerUHost.Tests
                 using (HttpClient httpClient = new HttpClient())
                 {
                     httpClient.Timeout = TimeSpan.FromSeconds(120);
-                    
+
                     using (MineruClient client = new MineruClient(mineruUrl, httpClient))
                     {
                         using (Stream imageStream = await _resourceManager.GetResourceStreamAsync(TestFile.Image01))
@@ -214,7 +214,7 @@ namespace MinerUHost.Tests
                                 .WithLanguages("en")
                                 .WithMarkdownResponse()
                                 .Build();
-                            
+
                             using (MineruResponse response = await client.ParseFileAsync(request))
                             {
                                 string responseMarkdown = await response.ReadAsMarkdownAsync();
@@ -238,7 +238,7 @@ namespace MinerUHost.Tests
                 // Cleanup: Stop the launcher
                 _output.WriteLine("Stopping MinerU service...");
                 cancellationTokenSource.Cancel();
-                
+
                 if (launcherTask != null)
                 {
                     try
@@ -254,7 +254,7 @@ namespace MinerUHost.Tests
                         _output.WriteLine($"Error stopping MinerU service: {ex.Message}");
                     }
                 }
-                
+
                 cancellationTokenSource.Dispose();
             }
         }
@@ -266,7 +266,7 @@ namespace MinerUHost.Tests
                 httpClient.Timeout = TimeSpan.FromSeconds(5);
                 DateTime startTime = DateTime.UtcNow;
                 string docsUrl = $"{baseUrl}/docs";
-                
+
                 while ((DateTime.UtcNow - startTime).TotalSeconds < timeoutSeconds)
                 {
                     try

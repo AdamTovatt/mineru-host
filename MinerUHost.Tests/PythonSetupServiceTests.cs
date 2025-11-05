@@ -39,7 +39,7 @@ namespace MinerUHost.Tests
 
             // Assert
             _processRunnerMock.Verify(x => x.RunProcess("python", "-m venv mineru-venv", _testDirectory), Times.Once);
-            
+
             string markerPath = Path.Combine(_testDirectory, ".mineru-setup-complete");
             File.Exists(markerPath).Should().BeTrue();
         }
@@ -65,7 +65,7 @@ namespace MinerUHost.Tests
         {
             // Arrange
             List<string> callOrder = new List<string>();
-            
+
             _processRunnerMock
                 .Setup(x => x.RunProcess(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns((string fileName, string args, string workingDir) =>

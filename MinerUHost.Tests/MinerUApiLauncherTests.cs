@@ -45,9 +45,9 @@ namespace MinerUHost.Tests
             // Arrange
             CommandLineOptions options = new CommandLineOptions { InstallPath = _testDirectory };
             CancellationTokenSource cts = new CancellationTokenSource();
-            
+
             _setupValidatorMock.Setup(x => x.IsSetupComplete(_testDirectory)).Returns(false);
-            
+
             Process mockProcess = CreateMockProcess();
             _processRunnerMock
                 .Setup(x => x.StartProcess(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -62,7 +62,7 @@ namespace MinerUHost.Tests
             // Assert
             await act.Should().ThrowAsync<OperationCanceledException>();
             _pythonSetupServiceMock.Verify(x => x.PerformSetup(_testDirectory), Times.Once);
-            
+
             mockProcess.Dispose();
         }
 
@@ -72,9 +72,9 @@ namespace MinerUHost.Tests
             // Arrange
             CommandLineOptions options = new CommandLineOptions { InstallPath = _testDirectory };
             CancellationTokenSource cts = new CancellationTokenSource();
-            
+
             _setupValidatorMock.Setup(x => x.IsSetupComplete(_testDirectory)).Returns(true);
-            
+
             Process mockProcess = CreateMockProcess();
             _processRunnerMock
                 .Setup(x => x.StartProcess(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -88,7 +88,7 @@ namespace MinerUHost.Tests
             // Assert
             await act.Should().ThrowAsync<OperationCanceledException>();
             _pythonSetupServiceMock.Verify(x => x.PerformSetup(It.IsAny<string>()), Times.Never);
-            
+
             mockProcess.Dispose();
         }
 
@@ -96,16 +96,16 @@ namespace MinerUHost.Tests
         public async Task RunAsync_StartsProcessWithCorrectArguments()
         {
             // Arrange
-            CommandLineOptions options = new CommandLineOptions 
-            { 
+            CommandLineOptions options = new CommandLineOptions
+            {
                 InstallPath = _testDirectory,
                 Host = "127.0.0.1",
                 Port = 9000,
             };
             CancellationTokenSource cts = new CancellationTokenSource();
-            
+
             _setupValidatorMock.Setup(x => x.IsSetupComplete(_testDirectory)).Returns(true);
-            
+
             Process mockProcess = CreateMockProcess();
             _processRunnerMock
                 .Setup(x => x.StartProcess(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
@@ -126,7 +126,7 @@ namespace MinerUHost.Tests
                 ),
                 Times.Once
             );
-            
+
             mockProcess.Dispose();
         }
 
@@ -145,10 +145,10 @@ namespace MinerUHost.Tests
 
             Process process = new Process { StartInfo = startInfo };
             process.Start();
-            
+
             // Give the process a moment to fully start
             Thread.Sleep(50);
-            
+
             return process;
         }
     }

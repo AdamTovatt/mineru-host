@@ -44,7 +44,7 @@ namespace MinerUHost.Tests
                 // Assert
                 process.Should().NotBeNull();
                 process.HasExited.Should().BeFalse();
-                
+
                 // Cleanup
                 process.WaitForExit(2000);
             }
