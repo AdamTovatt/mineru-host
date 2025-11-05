@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices;
+
 namespace MinerUHost
 {
     /// <summary>
@@ -33,11 +35,41 @@ namespace MinerUHost
 
             CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
-            // Handle Ctrl+C gracefully
+            // Handle Ctrl+C (SIGINT) gracefully
             Console.CancelKeyPress += (sender, e) =>
             {
                 e.Cancel = true;
                 cancellationTokenSource.Cancel();
+            };
+
+            // Handle POSIX signals (SIGTERM from systemd, etc.) on Linux/Unix
+            PosixSignalRegistration? sigtermRegistration = null;
+            PosixSignalRegistration? sigintRegistration = null;
+
+            if (OperatingSystem.IsLinux() || OperatingSystem.IsMacOS() || OperatingSystem.IsFreeBSD())
+            {
+                sigtermRegistration = PosixSignalRegistration.Create(PosixSignal.SIGTERM, context =>
+                {
+                    context.Cancel = true;
+                    cancellationTokenSource.Cancel();
+                });
+
+                sigintRegistration = PosixSignalRegistration.Create(PosixSignal.SIGINT, context =>
+                {
+                    context.Cancel = true;
+                    cancellationTokenSource.Cancel();
+                });
+            }
+
+            // Handle application exit (including console window close on Windows) to ensure cleanup
+            AppDomain.CurrentDomain.ProcessExit += (sender, e) =>
+            {
+                if (!cancellationTokenSource.IsCancellationRequested)
+                {
+                    cancellationTokenSource.Cancel();
+                    // Give the cleanup a moment to complete
+                    Thread.Sleep(2000);
+                }
             };
 
             try
@@ -55,6 +87,12 @@ namespace MinerUHost
             {
                 Console.WriteLine($"Application failed with error: {ex.Message}");
                 return 1;
+            }
+            finally
+            {
+                sigtermRegistration?.Dispose();
+                sigintRegistration?.Dispose();
+                cancellationTokenSource.Dispose();
             }
         }
 
