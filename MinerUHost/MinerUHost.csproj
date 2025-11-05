@@ -6,10 +6,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>mineru-host</AssemblyName>
+    <VersionPrefix>0.1.0</VersionPrefix>
 
     <!-- NuGet Package Properties -->
     <PackageId>MinerUHost</PackageId>
-    <Version>${AssemblyVersion}</Version>
+    <Version>$(VersionPrefix)</Version>
     <Authors>Adam Tovatt</Authors>
     <Description>A C# wrapper for MinerU that automates setup and manages the process lifecycle. Can be used as a standalone executable or embedded as a library in other .NET applications.</Description>
     <PackageProjectUrl>https://github.com/AdamTovatt/MinerUHost</PackageProjectUrl>

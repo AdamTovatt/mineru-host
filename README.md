@@ -2,7 +2,7 @@
 [![Tests](https://github.com/AdamTovatt/mineru-sharp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/AdamTovatt/mineru-sharp/actions/workflows/dotnet.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-A C# wrapper for [MinerU](https://github.com/opendatalab/MinerU) that automates setup and manages the process lifecycle.
+A C# wrapper for [MinerU](https://github.com/opendatalab/MinerU) that automates setup and manages the process lifecycle. Available both as a standalone application and as a NuGet package that can be used from another .NET process.
 
 Is best used together with the [`MinerUSharp`](https://github.com/AdamTovatt/mineru-sharp) library (available as a [NuGet package](https://www.nuget.org/packages/MinerUSharp)).
 
@@ -13,7 +13,7 @@ Easily installed with [`updaemon`](https://github.com/AdamTovatt/updaemon).
 - Automatically creates a Python virtual environment
 - Installs MinerU and its dependencies
 - Launches and monitors the mineru-api service
-- Periodically cleans up the output directory to prevent disk bloat
+- Periodically cleans up the output directory to prevent disk bloat (optional)
 - Handles graceful shutdown
 
 ## Possible future expansion
