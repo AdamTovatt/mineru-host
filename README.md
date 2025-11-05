@@ -149,3 +149,12 @@ On first run, the application will:
 
 Subsequent runs will skip setup and start the service immediately.
 
+## Automatic Cleanup
+The underlying `MinerU` Python service automatically creates a bunch of files in a folder called "output" next to the folder for the virtual environment that it is running from.
+
+If you want to keep those files you can disable automatic cleanup by setting the interval parameter to 0.
+
+If you just want to host the `MinerU` API to be able to use it from some other code or similar without having it create those files on your disk for each file you parse then you can leave the interval parameter to the default interval of 5 minutes. This will ensure those files are cleaned up every 5 minutes so that the `MinerU` API doesn't fill up your disk with temporary output files that you don't want. You will still be able to get any data you want back through the API of course.
+
+## Accessing the documentation
+To access the openapi documentation that comes with the `MinerU` API you can use the `/docs` endpoint. For example, if you're hosting at `localhost:8000`, then just open a web browser and go to `http://localhost:8000/docs`.
