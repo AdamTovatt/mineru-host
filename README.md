@@ -1,5 +1,7 @@
 # MinerUHost
 [![Tests](https://github.com/AdamTovatt/mineru-sharp/actions/workflows/dotnet.yml/badge.svg)](https://github.com/AdamTovatt/mineru-sharp/actions/workflows/dotnet.yml)
+[![NuGet Version](https://img.shields.io/nuget/v/MinerUHost.svg)](https://www.nuget.org/packages/MinerUHost/)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/MinerUHost.svg)](https://www.nuget.org/packages/MinerUHost/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
 A C# wrapper for [MinerU](https://github.com/opendatalab/MinerU) that automates setup and manages the process lifecycle. Available both as a standalone application and as a NuGet package that can be used from another .NET process.
@@ -16,13 +18,17 @@ Easily installed with [`updaemon`](https://github.com/AdamTovatt/updaemon).
 - Periodically cleans up the output directory to prevent disk bloat (optional)
 - Handles graceful shutdown
 
+Creation of the virtual environment and installation only happens the first time, then it detects that it's already installed and just starts it directly.
+
 ## Possible future expansion
 
 - Periodically restart the underlying python service that seems to have a memory leak
 
 ## Usage
 
-### As a Standalone Application
+You can use `MinerUHost` either as a [standalone application](#as-a-standalone-application) or as a [library (NuGet package)](#as-a-library-nuget-package).
+
+## As a Standalone Application
 
 ```bash
 mineru-host [options]
@@ -42,7 +48,7 @@ mineru-host [options]
 mineru-host --host 127.0.0.1 --port 9000
 ```
 
-### As a Library (NuGet Package)
+## As a Library (NuGet Package)
 
 Install the package:
 ```bash
@@ -53,34 +59,42 @@ Use in your C# application:
 ```csharp
 using MinerUHost;
 
-// Simple usage with default settings
-var host = new MinerUProcessHost("127.0.0.1", 8200);
-await host.RunAsync(cancellationToken);
-
-// Or with custom install path
-var host = new MinerUProcessHost("127.0.0.1", 8200, "/path/to/install");
-await host.RunAsync(cancellationToken);
-
-// Or with full configuration
-var host = new MinerUProcessHost("127.0.0.1", 8200, "/path/to/install", cleanupIntervalMinutes: 10);
-await host.RunAsync(cancellationToken);
-
-// To disable cleanup, set interval to 0 or negative
-var hostNoCleanup = new MinerUProcessHost("127.0.0.1", 8200, "/path/to/install", cleanupIntervalMinutes: 0);
-await hostNoCleanup.RunAsync(cancellationToken);
-
-// Or using CommandLineOptions
-var options = new CommandLineOptions("127.0.0.1", 8200, "/path/to/install", 10);
-var host = new MinerUProcessHost(options);
-await host.RunAsync(cancellationToken);
-
-// With custom logging (integrating with your existing ILoggerFactory)
-var host = new MinerUProcessHost(options, yourLoggerFactory);
+MinerUProcessHost host = new MinerUProcessHost("127.0.0.1", 8200);
 await host.RunAsync(cancellationToken);
 ```
 
-#### Example: Running in ASP.NET Core as a Background Service
+### More Detailed Library Examples
+Here are some more detailed examples of how the library can be used from code:
 
+```csharp
+using MinerUHost;
+
+// With custom install path and a specified cleanup interval in minutes (default is 5)
+MinerUProcessHost host = new MinerUProcessHost("127.0.0.1", 8200, "/path/to/install", 10);
+await host.RunAsync(cancellationToken);
+```
+
+> [!TIP]
+> To disable automatic cleanup you can set the cleanupIntervalMinutes-parameter to 0 (or a negative value if you prefer that for some reason)
+
+You can also use an `CommandLineOptions` object if you want:
+```csharp
+CommandLineOptions options = new CommandLineOptions("127.0.0.1", 8200, "/path/to/install", 10);
+MinerUProcessHost host = new MinerUProcessHost(options);
+await host.RunAsync(cancellationToken);
+```
+
+If you want to use some custom logging you can send a `CommandLineOptions` object followed by an `ILoggerFactory`:
+```csharp
+// With custom logging (integrating with your existing ILoggerFactory)
+MinerUProcessHost host = new MinerUProcessHost(options, yourLoggerFactory);
+await host.RunAsync(cancellationToken);
+```
+
+### Example: Running in ASP.NET as a Background Service
+Here is a longer code snippet showing how it could be used together with an ASP.NET application as a background service.
+
+Create the background service:
 ```csharp
 public class MinerUBackgroundService : BackgroundService
 {
@@ -99,8 +113,8 @@ public class MinerUBackgroundService : BackgroundService
 
         try
         {
-            var options = new CommandLineOptions("127.0.0.1", 8200);
-            var host = new MinerUProcessHost(options, _loggerFactory);
+            CommandLineOptions options = new CommandLineOptions("127.0.0.1", 8200);
+            MinerUProcessHost host = new MinerUProcessHost(options, _loggerFactory);
             await host.RunAsync(stoppingToken);
         }
         catch (OperationCanceledException)
@@ -113,8 +127,11 @@ public class MinerUBackgroundService : BackgroundService
         }
     }
 }
+```
 
-// Register in Program.cs
+Then register it at startup (probably in `Program.cs` if you haven't changed the name of that file)
+```csharp
+// Register at startup
 builder.Services.AddHostedService<MinerUBackgroundService>();
 ```
 
