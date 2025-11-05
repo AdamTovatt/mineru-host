@@ -51,10 +51,11 @@ namespace MinerUHost
             Console.WriteLine("  --host <host>               Host to bind MinerU API (default: 0.0.0.0)");
             Console.WriteLine("  --port <port>               Port to bind MinerU API (default: 8200)");
             Console.WriteLine("  --install-path <path>       Path to install MinerU (default: application directory)");
-            Console.WriteLine("  --cleanup-interval <mins>   Cleanup interval in minutes (default: 5)");
+            Console.WriteLine("  --cleanup-interval <mins>   Cleanup interval in minutes (default: 5, 0 or negative to disable)");
             Console.WriteLine();
             Console.WriteLine("Example:");
             Console.WriteLine("  MinerUHost --host 127.0.0.1 --port 9000 --install-path /opt/mineru");
+            Console.WriteLine("  MinerUHost --cleanup-interval 0  # Disable cleanup");
         }
     }
 }

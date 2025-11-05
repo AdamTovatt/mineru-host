@@ -33,7 +33,7 @@ mineru-host [options]
 - `--host <host>` - Host to bind MinerU API (default: 0.0.0.0)
 - `--port <port>` - Port to bind MinerU API (default: 8200)
 - `--install-path <path>` - Installation directory (default: application directory)
-- `--cleanup-interval <minutes>` - Output cleanup interval (default: 5)
+- `--cleanup-interval <minutes>` - Output cleanup interval in minutes (default: 5, set to 0 or negative to disable)
 
 ### Example
 
@@ -63,6 +63,10 @@ await host.RunAsync(cancellationToken);
 // Or with full configuration
 var host = new MinerUProcessHost("127.0.0.1", 8200, "/path/to/install", cleanupIntervalMinutes: 10);
 await host.RunAsync(cancellationToken);
+
+// To disable cleanup, set interval to 0 or negative
+var hostNoCleanup = new MinerUProcessHost("127.0.0.1", 8200, "/path/to/install", cleanupIntervalMinutes: 0);
+await hostNoCleanup.RunAsync(cancellationToken);
 
 // Or using CommandLineOptions
 var options = new CommandLineOptions("127.0.0.1", 8200, "/path/to/install", 10);

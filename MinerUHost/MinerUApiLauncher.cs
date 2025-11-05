@@ -44,12 +44,23 @@ namespace MinerUHost
                 _logger.LogInformation("Setup already complete. Skipping setup.");
             }
 
-            // Start cleanup timer
-            using (Timer cleanupTimer = new Timer(
-                callback: _ => _outputCleaner.CleanOutputDirectory(options.InstallPath),
-                state: null,
-                dueTime: TimeSpan.FromMinutes(options.CleanupIntervalMinutes),
-                period: TimeSpan.FromMinutes(options.CleanupIntervalMinutes)))
+            // Start cleanup timer if interval is greater than 0
+            Timer? cleanupTimer = null;
+            if (options.CleanupIntervalMinutes > 0)
+            {
+                _logger.LogInformation("Starting cleanup timer with interval of {CleanupInterval} minutes", options.CleanupIntervalMinutes);
+                cleanupTimer = new Timer(
+                    callback: _ => _outputCleaner.CleanOutputDirectory(options.InstallPath),
+                    state: null,
+                    dueTime: TimeSpan.FromMinutes(options.CleanupIntervalMinutes),
+                    period: TimeSpan.FromMinutes(options.CleanupIntervalMinutes));
+            }
+            else
+            {
+                _logger.LogInformation("Cleanup timer disabled (interval set to {CleanupInterval})", options.CleanupIntervalMinutes);
+            }
+
+            try
             {
                 // Start mineru-api process
                 string mineruExecutable = GetMinerUExecutablePath(options.InstallPath);
@@ -86,6 +97,10 @@ namespace MinerUHost
                         throw new InvalidOperationException($"MinerU API process exited unexpectedly with code {exitCode}");
                     }
                 }
+            }
+            finally
+            {
+                cleanupTimer?.Dispose();
             }
         }
 
