@@ -4,6 +4,13 @@ namespace MinerUHost
     {
         public static async Task<int> Main(string[] args)
         {
+            // Check for help flag
+            if (args.Any(arg => arg == "--help" || arg == "-h"))
+            {
+                PrintUsage();
+                return 0;
+            }
+
             CommandLineOptions options;
             try
             {
@@ -48,6 +55,7 @@ namespace MinerUHost
             Console.WriteLine("Usage: MinerUHost [options]");
             Console.WriteLine();
             Console.WriteLine("Options:");
+            Console.WriteLine("  -h, --help                  Show this help message");
             Console.WriteLine("  --host <host>               Host to bind MinerU API (default: 0.0.0.0)");
             Console.WriteLine("  --port <port>               Port to bind MinerU API (default: 8200)");
             Console.WriteLine("  --install-path <path>       Path to install MinerU (default: application directory)");

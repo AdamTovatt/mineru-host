@@ -30,6 +30,7 @@ mineru-host [options]
 
 ### Options
 
+- `-h, --help` - Show help message
 - `--host <host>` - Host to bind MinerU API (default: 0.0.0.0)
 - `--port <port>` - Port to bind MinerU API (default: 8200)
 - `--install-path <path>` - Installation directory (default: application directory)

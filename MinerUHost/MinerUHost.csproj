@@ -9,7 +9,7 @@
 
     <!-- NuGet Package Properties -->
     <PackageId>MinerUHost</PackageId>
-    <Version>1.0.0</Version>
+    <Version>${AssemblyVersion}</Version>
     <Authors>Adam Tovatt</Authors>
     <Description>A C# wrapper for MinerU that automates setup and manages the process lifecycle. Can be used as a standalone executable or embedded as a library in other .NET applications.</Description>
     <PackageProjectUrl>https://github.com/AdamTovatt/MinerUHost</PackageProjectUrl>
@@ -18,9 +18,12 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>mineru;pdf;ocr;document-parsing;python-wrapper</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Title>MineruHost</Title>
+    <Copyright>MIT</Copyright>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
